@@ -1,5 +1,5 @@
 const { AppError } = require("../helpers/error");
-const User = require("../models/User")
+const {User, Restaurant} = require("../models")
 
 // Service nhận vào data từ controller
 // Nhiệm vụ: xử lý nghiệp vụ của ứng dụng, sau đó gọi tới model của squelize
@@ -7,7 +7,10 @@ const User = require("../models/User")
 
 const getUsers = async () =>{
     try {
-        const users = await User.findAll();
+        const users = await User.findAll({include: Restaurant} );
+        if (users.length === 0) {
+            throw new AppError(404, "Không tìm thấy user nào");
+        }
         return users;
     } catch (error) {
         throw new AppError(500, "Something went wrong with DB");

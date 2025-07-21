@@ -1,7 +1,7 @@
 class AppError extends Error{
     constructor(statusCode,message){
         super(message);
-        this.statusCode=statusCode;
+        this.statusCode = statusCode;
     }
 } 
   // err:instance cuar AppError
@@ -10,7 +10,7 @@ const handleErrors=(err,req,res,next)=>{
     // neu err la instane cuar AppError.nghia la err la minh biet va da xu ly
     if(!(err instanceof AppError))
    {
-    err= new AppError(500,"Internal Sever")
+    err= new AppError(500,err)
    }
    const {message,statusCode}=err;
    res.status(statusCode).json({

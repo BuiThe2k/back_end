@@ -1,4 +1,4 @@
-const respone = ( payload,...rest)=>{
+const response = ( payload,...rest)=>{
 return{
     status:"success",
     data: payload,
@@ -6,5 +6,5 @@ return{
 };
 }
 module.exports={
-    respone,
+    response,
 }

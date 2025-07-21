@@ -7,8 +7,7 @@
 const userService = require("../services/users.service");
 const { response } = require("../helpers/response");
 
-const getUsers = () => {
-    return async (req, res, next) => {
+const getUsers = async (req, res, next) => {
         try {
             const users = await userService.getUsers();
             res.status(200).json(response(users))
@@ -18,7 +17,6 @@ const getUsers = () => {
             next(error);
         }
     };
-};
 
 const createUser = () => {
     return async (req, res, next) => {

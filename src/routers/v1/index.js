@@ -9,7 +9,7 @@ const v1 = express.Router();
 
 
 // Định nghĩa các router cho user
-v1.get("/users", userController.getUsers());
+v1.get("/users", userController.getUsers);
                 //(req, res) => {}
 v1.post("/users",userController.createUser());
 v1.delete("/users/:id", userController.deleteUser());

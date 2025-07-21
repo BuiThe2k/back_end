@@ -1,9 +1,10 @@
 const {DataTypes} = require("sequelize");
-const sequelize = require(".");
 const bcrypt = require("bcrypt");
 
-const User = sequelize.define(
-    "User", {
+module.exports = (sequelize) => {
+    return sequelize.define(
+        "User",
+        {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -25,33 +26,13 @@ const User = sequelize.define(
             isEmail: {
                 msg: "Email is not valid"
             },
-            // Demo custom validation
-            // customValidator: (value) => {
-                //Logic validation
-                // Nếu không thỏa mãn logic
-                // throw new Error("Custom validation failed");
-            // },
         },
     },
     password: {
         type: DataTypes.STRING,
         allowNull: false,
-    //     validate: {
-    //         // Demo custom validation
-    //         isMatchedConfirmPassword: (value) => {
-    //             // Logic validation
-    //             // Nếu không thỏa mãn logic
-    //             // throw new Error ("message");
-    //             if (value !== this.confirmPassword) {
-    //                 throw new Error("Confirm password do not match");
-    //             }
-    //     },
-    // },
 
-    // Sẽ được chạy trước khi create/update
     set (value) {
-           
-
             // Không được lưu plain text password trực tiếp vào DB
             // Ta cần hash password bằng thư viện bcrypt
             const salt  = bcrypt.genSaltSync();
@@ -77,6 +58,5 @@ const User = sequelize.define(
             }
         }
     }
-);
-
-module.exports = User;
+    )
+};

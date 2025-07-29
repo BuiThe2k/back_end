@@ -7,7 +7,7 @@ const {User, Restaurant} = require("../models")
 
 const getUsers = async () =>{
     try {
-        const users = await User.findAll({include: Restaurant} );
+        const users = await User.findAll({include: "restaurants"} );
         if (users.length === 0) {
             throw new AppError(404, "Không tìm thấy user nào");
         }
@@ -16,6 +16,16 @@ const getUsers = async () =>{
         throw new AppError(500, "Something went wrong with DB");
     }
 }
+// const getUserByID = async (id) =>{
+//     try {
+//         const users = await User.findByPk(id, {include: "restaurants"} );
+//         if (!users) {
+//             throw new AppError(404, "Không tìm thấy user nào");
+//         }
+//     } catch (error) {
+//         throw new AppError(500, "Something went wrong with DB");
+//     }
+// }
 
 const createUser = async (data) => {
     try {
@@ -24,7 +34,6 @@ const createUser = async (data) => {
                 email: data.email,
             },
         });
-
         // Email đã tồn tại trong DB
         if (user){
             throw new AppError(400, "Email đã tồn tại");
@@ -35,7 +44,6 @@ const createUser = async (data) => {
             data.password = Math.random().toString(36).substring(2);
             // Gửi email về cho user mật khẩu này
         }
-
         const createdUser = await User.create(data);
         return createdUser;
     }catch (error) {
@@ -59,9 +67,6 @@ const deleteUser = async (userId) => {
     }
 };
 
-// Delete: 
-// - User.findOne({where: {id: 1}}) - Nếu tìm không thấy sẽ trả về lỗi
-// - User.destroy({ where: { id: 1 } });
 // Update: 
 // - User.findOne({where: {id: 1}}) - Nếu tìm không thấy sẽ trả về lỗi
 // - User.update(data, { where: { id: 1 } });

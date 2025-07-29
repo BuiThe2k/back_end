@@ -1,15 +1,20 @@
 const express = require("express");
-const {sequelize} = require("./models");
+const { sequelize } = require("./models");
 const { AppError, handleErrors} = require("./helpers/error");
+const authorization = require("./middlewares/authorization");
 
 const app = express();
 app.use(express.json());
+app.use(express.static("."));
 
 // Sync models with the db
-sequelize.sync({ alter: true });
+// sequelize.sync({ alter: true });
 
 const v1 = require("./routers/v1");
 app.use("/api/v1", v1);
+
+//Demo authorization
+
 //Demo handle error
 app.get("/error", (req, res, next) => {
     throw new AppError(500, "Internal Server");

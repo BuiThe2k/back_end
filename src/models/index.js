@@ -1,11 +1,12 @@
 // Setup Sequelize
 const { Sequelize} = require('sequelize');
+const configs = require("../config");
 
-const sequelize = new Sequelize("node26-food", "root", "12345",
+const sequelize = new Sequelize(configs.DB_NAME, configs.DB_USER, configs.DB_PASSWORD,
     {
-    dialect: "mysql",
-    host: "localhost",
-    port: 3306,
+    dialect: configs.DB_DIALECT,
+    host: configs.DB_HOST,
+    port: configs.DB_PORT,
 });
 
 (async() =>{
@@ -20,12 +21,24 @@ const sequelize = new Sequelize("node26-food", "root", "12345",
 // khởi tạo models
 const User = require("./User")(sequelize);
 const Restaurant = require("./Restaurant") (sequelize);
+const RestaurantLikes = require("./RestaurantLikes") (sequelize);
 
 // Định nghĩa relationship giữa các models
-Restaurant.belongsTo(User, { foreignKey: "userId" });
-User.hasMany(Restaurant, { foreignKey: "userId"});
 
-// sequelize.sync({ alter: true });
+// User 1 - n Restaurant
+Restaurant.belongsTo(User, { as: "owner", foreignKey: "userId" });
+User.hasMany(Restaurant, { as: "restaurants", foreignKey: "userId"});
+
+// User 1 - n RestaurantLikes
+// Restaurant 1 - n RestaurantLikes
+User.belongsToMany(Restaurant, { as: "restaurantLikes",
+                                 through: RestaurantLikes,
+                                 foreignKey: "userId" });
+Restaurant.belongsToMany(User, { as:"userLikes",
+                                 through: RestaurantLikes,
+                                 foreignKey: "restaurantId" });
+
+sequelize.sync({ alter: true });
 
 module.exports = {
     sequelize,

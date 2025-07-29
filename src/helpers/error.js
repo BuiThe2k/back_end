@@ -6,6 +6,8 @@ class AppError extends Error{
 } 
   // err:instance cuar AppError
 const handleErrors=(err,req,res,next)=>{
+    console.log(err);
+    
     // kiem tra err co phai la instance cuar AppError hay khoong 
     // neu err la instane cuar AppError.nghia la err la minh biet va da xu ly
     if(!(err instanceof AppError))

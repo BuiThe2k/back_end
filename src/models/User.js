@@ -1,4 +1,4 @@
-const {DataTypes} = require("sequelize");
+const { DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 
 module.exports = (sequelize) => {
@@ -19,9 +19,9 @@ module.exports = (sequelize) => {
         field: "last_name",
     },
     email: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(255),
         allowNull: false,
-        unique: true,
+        unique: "email",
         validate: {
             isEmail: {
                 msg: "Email is not valid"
@@ -31,16 +31,21 @@ module.exports = (sequelize) => {
     password: {
         type: DataTypes.STRING,
         allowNull: false,
-
-    set (value) {
+        set (value) {
             // Không được lưu plain text password trực tiếp vào DB
             // Ta cần hash password bằng thư viện bcrypt
             const salt  = bcrypt.genSaltSync();
             const hashedPassword = bcrypt.hashSync(value, salt );
-
             this.setDataValue("password", hashedPassword);
         }
     },
+    role: {
+        type: DataTypes.ENUM("user", "merchant", "admin"),
+        defaultValue: "user",
+    },
+    avatar: {
+        type: DataTypes.STRING
+    }
 },
     {
         tableName: "users",
